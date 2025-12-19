@@ -1,0 +1,104 @@
+[gd_scene load_steps=12 format=3 uid="uid://btsu5hym1hp7v"]
+
+[ext_resource type="Shader" uid="uid://joxdjdcb7b0g" path="res://circle_gradient.gdshader" id="1_272bh"]
+[ext_resource type="Texture2D" uid="uid://pcx55pjrfule" path="res://assets/white_background.png" id="2_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://b427nn3lncrtp" path="res://assets/circle_gradient.png" id="2_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://dchleoemgaoj6" path="res://assets/512_checker.png" id="3_1bvp3"]
+[ext_resource type="Shader" uid="uid://ctscm1q7ouccv" path="res://checker_floor.gdshader" id="3_lquwl"]
+[ext_resource type="PackedScene" uid="uid://dx1548l4kqcoc" path="res://metal_direction_block.tscn" id="4_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://dlkqqbnfl3bp5" path="res://assets/blank_1080_texture.png" id="5_7mycd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
+shader = ExtResource("1_272bh")
+shader_parameter/color = Color(0.12591088, 0.12591082, 0.12591082, 1)
+shader_parameter/scale = 0.37
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+shader = ExtResource("3_lquwl")
+shader_parameter/checker_size = 0.54
+shader_parameter/checker_512 = ExtResource("3_1bvp3")
+shader_parameter/checker_color = Color(0.14348, 0.1394, 0.17, 1)
+shader_parameter/scale = 1.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7mycd"]
+blend_mode = 1
+
+[sub_resource type="GDScript" id="GDScript_1bvp3"]
+script/source = "@tool
+extends Node2D
+
+@export var checker_world : Node2D
+@export var checker_shader : ShaderMaterial
+
+func _process(delta: float) -> void:
+	scale = Vector2.ONE * 1.0 / checker_shader.get_shader_parameter(\"checker_size\")
+	#scale = checker_world.scale
+"
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -1
+
+[node name="WhiteBackground" type="Sprite2D" parent="Background"]
+modulate = Color(0.09706666, 0.08400001, 0.1, 1)
+clip_children = 2
+texture = ExtResource("2_0xm2m")
+centered = false
+
+[node name="Gradient" type="Sprite2D" parent="Background"]
+modulate = Color(0.060530342, 0.06053035, 0.060530327, 1)
+texture_filter = 1
+material = SubResource("ShaderMaterial_272bh")
+position = Vector2(960, 540)
+scale = Vector2(1.88, 1.88)
+texture = ExtResource("5_7mycd")
+
+[node name="CheckerPattern" type="Sprite2D" parent="Background"]
+clip_children = 1
+texture_filter = 1
+material = SubResource("ShaderMaterial_7mycd")
+position = Vector2(960, 540)
+texture = ExtResource("5_7mycd")
+
+[node name="Gradient2" type="Sprite2D" parent="Background/CheckerPattern"]
+modulate = Color(0.060530342, 0.06053035, 0.060530327, 1)
+texture_filter = 1
+material = SubResource("ShaderMaterial_272bh")
+texture = ExtResource("5_7mycd")
+
+[node name="Node2D" type="Node2D" parent="Background"]
+visible = false
+position = Vector2(960, 540)
+scale = Vector2(2.5, 2.5)
+
+[node name="CircleGradient" type="Sprite2D" parent="Background"]
+visible = false
+modulate = Color(1, 1, 1, 0.13333334)
+material = SubResource("CanvasItemMaterial_7mycd")
+position = Vector2(960, 540)
+scale = Vector2(1.94, 1.94)
+texture = ExtResource("2_1bvp3")
+
+[node name="CircleGradient2" type="Sprite2D" parent="."]
+show_behind_parent = true
+position = Vector2(960, 540)
+texture = ExtResource("5_7mycd")
+
+[node name="PuzzleWorld" type="Node2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(1.8518518, 1.8518518)
+script = SubResource("GDScript_1bvp3")
+checker_shader = SubResource("ShaderMaterial_7mycd")
+
+[node name="MetalDirectionBlock2" parent="PuzzleWorld" instance=ExtResource("4_1bvp3")]
+clip_children = 2
+position = Vector2(-32, 32)
+
+[node name="MetalDirectionBlock3" parent="PuzzleWorld" instance=ExtResource("4_1bvp3")]
+clip_children = 2
+position = Vector2(32, -32)
+
+[node name="MetalDirectionBlock4" parent="PuzzleWorld" instance=ExtResource("4_1bvp3")]
+clip_children = 2
+position = Vector2(-32, -32)

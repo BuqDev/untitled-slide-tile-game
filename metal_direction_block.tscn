@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://dx1548l4kqcoc"]
+
+[ext_resource type="Texture2D" uid="uid://lnfvas1jeavp" path="res://assets/metal_direction_block.png" id="1_ybo1b"]
+[ext_resource type="Texture2D" uid="uid://cjp5sjcsxguse" path="res://assets/shine.png" id="2_3p5lb"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ybo1b"]
+blend_mode = 1
+
+[sub_resource type="GDScript" id="GDScript_ybo1b"]
+script/source = "@tool
+extends Sprite2D
+
+var parent
+
+func _ready() -> void:
+	parent = get_parent()
+	parent.clip_children = 2;
+
+func _process(_delta: float) -> void:
+	var screen_scale = Vector2(1920.0, 1080.0) * parent.scale
+	global_position = floor(parent.global_position / screen_scale) * screen_scale + (screen_scale / 2)
+"
+
+[node name="MetalDirectionBlock" type="Sprite2D"]
+clip_children = 2
+texture_filter = 1
+texture = ExtResource("1_ybo1b")
+
+[node name="Shine" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.16470589)
+material = SubResource("CanvasItemMaterial_ybo1b")
+position = Vector2(960, 540)
+texture = ExtResource("2_3p5lb")
+script = SubResource("GDScript_ybo1b")
+
+[node name="Shadow5" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.40784314)
+z_index = -1
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1_ybo1b")
+
+[node name="Shadow6" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.14901961)
+z_index = -1
+scale = Vector2(1.23, 1.23)
+texture = ExtResource("1_ybo1b")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 0.16862746)
+z_index = -1
+position = Vector2(-4, 4)
+texture = ExtResource("1_ybo1b")
+
+[node name="Shadow3" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.16862746)
+z_index = -1
+position = Vector2(-8, 8)
+texture = ExtResource("1_ybo1b")
+
+[node name="Shadow4" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.16862746)
+z_index = -1
+position = Vector2(-12, 12)
+texture = ExtResource("1_ybo1b")
+
+[node name="Shadow2" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.16862746)
+z_index = -1
+position = Vector2(-16, 16)
+texture = ExtResource("1_ybo1b")

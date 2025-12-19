@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cp2egv33ck3if"]
+
+[ext_resource type="Script" uid="uid://bk3ofuxnymaig" path="res://input_effect.gd" id="1_3cvyh"]
+[ext_resource type="Texture2D" uid="uid://bg2schsha0cid" path="res://assets/arrow.png" id="1_7pych"]
+
+[node name="Node3D" type="Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+offset = Vector2(46.36, 0)
+texture = ExtResource("1_7pych")
+script = ExtResource("1_3cvyh")

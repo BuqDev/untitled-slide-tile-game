@@ -1,0 +1,177 @@
+[gd_scene load_steps=14 format=3 uid="uid://ckcc3w7belxeq"]
+
+[ext_resource type="PackedScene" uid="uid://o4fwaans2v2h" path="res://3d_metal_direction_block.tscn" id="1_t4uy4"]
+[ext_resource type="PackedScene" uid="uid://03o5rhuax2e8" path="res://3d_tile.tscn" id="2_t4uy4"]
+[ext_resource type="Shader" uid="uid://bbw87eq28j0vo" path="res://3d_stencil_shader.gdshader" id="3_uqnsk"]
+[ext_resource type="Texture2D" uid="uid://cbg3yhyf2y2kb" path="res://assets/vertical_shine.png" id="4_gyhtd"]
+[ext_resource type="Script" uid="uid://doywv1xgdy1k4" path="res://drag_direction_manager.gd" id="5_deqta"]
+[ext_resource type="Texture2D" uid="uid://bg2schsha0cid" path="res://assets/arrow.png" id="6_8nth0"]
+[ext_resource type="PackedScene" uid="uid://cp2egv33ck3if" path="res://input_effect.tscn" id="6_412rt"]
+
+[sub_resource type="Environment" id="Environment_t4uy4"]
+background_mode = 1
+ambient_light_source = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_uqnsk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_deqta"]
+render_priority = 0
+shader = ExtResource("3_uqnsk")
+shader_parameter/offset = 1.3
+shader_parameter/shine_texture = ExtResource("4_gyhtd")
+shader_parameter/zoomout = 5.0
+
+[sub_resource type="GDScript" id="GDScript_gyhtd"]
+script/source = "@tool
+extends MeshInstance3D
+
+@export var shader : ShaderMaterial
+
+var offset = 0.0
+@export var shine_curve : Curve
+
+func _physics_process(delta: float) -> void:
+	offset += delta / 10
+	offset = fmod(offset, 1.0)
+	shader.set_shader_parameter(\"offset\", shine_curve.sample(offset) + .3)
+"
+
+[sub_resource type="Curve" id="Curve_gyhtd"]
+_data = [Vector2(0, 0), 0.0, 0.021993779, 0, 0, Vector2(0.07608695, 1), 3.2080586, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="GDScript" id="GDScript_8nth0"]
+script/source = "extends Node3D
+
+#https://kidscancode.org/godot_recipes/4.x/3d/shooting_raycasts/
+
+@export var input_effect_packed : PackedScene
+
+@export var camera : Camera3D
+
+@export var drag_ie_texture : Texture2D
+
+func drag_block(at : Vector2, dir : Vector2):
+	var camera3d = get_viewport().get_camera_3d()
+	var from = camera3d.project_ray_origin(at)
+	var to = from + camera3d.project_ray_normal(at) * 100
+	
+	var space = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	var result = space.intersect_ray(query)
+	
+	if result:
+		print(result.collider.name)
+		# ----------- spawning input effect
+		var input_effect : Input_Effect = input_effect_packed.instantiate()
+		input_effect.texture = drag_ie_texture
+		input_effect.position_velocity = Vector3(dir.x, 0, dir.y) * 3.0
+		input_effect.position = result.position
+		input_effect.position.y += 2
+		get_parent().add_child(input_effect)
+		input_effect.rotation.z = (dir * Vector2(1, -1)).angle()
+	
+	print(dir)
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t4uy4")
+
+[node name="DeadLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 7.8951397, 0)
+light_energy = 0.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.529915, 0)
+light_color = Color(0.8701747, 0.88655686, 0.9688155, 1)
+shadow_enabled = true
+shadow_blur = 10.0
+distance_fade_enabled = true
+omni_range = 7.7442045
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.529915, 0)
+light_color = Color(0.82267785, 0.74726105, 0.9422245, 1)
+shadow_blur = 10.0
+omni_range = 11.988593
+
+[node name="World" type="Node3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="Block" parent="World" instance=ExtResource("1_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+
+[node name="Block2" parent="World" instance=ExtResource("1_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0.5)
+
+[node name="Block3" parent="World" instance=ExtResource("1_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, -0.5)
+
+[node name="Block4" parent="World" instance=ExtResource("1_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -0.5)
+
+[node name="Tile" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Tile2" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -4)
+
+[node name="Tile3" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -4)
+
+[node name="Tile7" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Tile8" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -12)
+
+[node name="Tile9" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -12)
+
+[node name="Tile10" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="Tile11" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 12)
+
+[node name="Tile12" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 12)
+
+[node name="Tile4" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Tile5" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 4)
+
+[node name="Tile6" parent="World" instance=ExtResource("2_t4uy4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 4)
+
+[node name="CamArm" type="Node3D" parent="."]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CamArm"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10.824223, 0)
+projection = 1
+size = 13.426387
+
+[node name="Shine" type="MeshInstance3D" parent="CamArm/Camera3D"]
+transform = Transform3D(20, 0, 0, 0, -4.371139e-07, -10, 0, 10, -4.371139e-07, 0, 6.10587e-08, -1.3968601)
+mesh = SubResource("PlaneMesh_uqnsk")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_deqta")
+script = SubResource("GDScript_gyhtd")
+shader = SubResource("ShaderMaterial_deqta")
+shine_curve = SubResource("Curve_gyhtd")
+
+[node name="DragDirectionManager" type="Node" parent="." node_paths=PackedStringArray("action_taker", "cam_arm")]
+script = ExtResource("5_deqta")
+action_taker = NodePath("../ActionTaker")
+cam_arm = NodePath("../CamArm")
+
+[node name="ActionTaker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+script = SubResource("GDScript_8nth0")
+input_effect_packed = ExtResource("6_412rt")
+camera = NodePath("../CamArm/Camera3D")
+drag_ie_texture = ExtResource("6_8nth0")
