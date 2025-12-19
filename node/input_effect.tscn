@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cp2egv33ck3if"]
 
-[ext_resource type="Script" uid="uid://bk3ofuxnymaig" path="res://input_effect.gd" id="1_3cvyh"]
+[ext_resource type="Script" uid="uid://bk3ofuxnymaig" path="res://scripts/input_effect.gd" id="1_3cvyh"]
 [ext_resource type="Texture2D" uid="uid://bg2schsha0cid" path="res://assets/arrow.png" id="1_7pych"]
 
 [node name="Node3D" type="Sprite3D"]

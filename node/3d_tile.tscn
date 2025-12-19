@@ -5,7 +5,6 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_8nth0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_412rt"]
-albedo_color = Color(0.14767182, 0.14767182, 0.14767176, 1)
 albedo_texture = ExtResource("1_8ok7m")
 
 [node name="Tile" type="Node3D"]

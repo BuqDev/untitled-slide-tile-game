@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://o4fwaans2v2h"]
+[gd_scene load_steps=9 format=3 uid="uid://o4fwaans2v2h"]
 
 [ext_resource type="Texture2D" uid="uid://lnfvas1jeavp" path="res://assets/metal_direction_block.png" id="1_b7rrg"]
+[ext_resource type="Script" uid="uid://bgo0j6l2a7jf6" path="res://scripts/3d_block.gd" id="1_bvtrn"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_wl5lw"]
 
@@ -8,7 +9,7 @@
 code = "// NOTE: Shader automatically converted from Godot Engine 4.5.stable's StandardMaterial3D.
 
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, unshaded, specular_schlick_ggx, depth_test_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx, depth_test_disabled;
 stencil_mode write, 1;
 
 uniform vec4 albedo : source_color;
@@ -73,20 +74,23 @@ albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b7rrg"]
 
-[node name="Block" type="Node3D"]
+[node name="Block" type="StaticBody3D"]
+collision_mask = 0
+script = ExtResource("1_bvtrn")
+properties = {
+"moveable": true
+}
 
 [node name="TopFace" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.5, 1, 0.5)
 mesh = SubResource("QuadMesh_wl5lw")
 surface_material_override/0 = SubResource("ShaderMaterial_ponsk")
 
 [node name="Cube" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
 mesh = SubResource("BoxMesh_uw8wt")
 surface_material_override/0 = SubResource("StandardMaterial3D_deqta")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
 shape = SubResource("BoxShape3D_b7rrg")

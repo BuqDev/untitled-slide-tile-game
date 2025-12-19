@@ -1,11 +1,11 @@
 [gd_scene load_steps=12 format=3 uid="uid://btsu5hym1hp7v"]
 
-[ext_resource type="Shader" uid="uid://joxdjdcb7b0g" path="res://circle_gradient.gdshader" id="1_272bh"]
+[ext_resource type="Shader" uid="uid://joxdjdcb7b0g" path="res://shaders/circle_gradient.gdshader" id="1_272bh"]
 [ext_resource type="Texture2D" uid="uid://pcx55pjrfule" path="res://assets/white_background.png" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://b427nn3lncrtp" path="res://assets/circle_gradient.png" id="2_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://dchleoemgaoj6" path="res://assets/512_checker.png" id="3_1bvp3"]
-[ext_resource type="Shader" uid="uid://ctscm1q7ouccv" path="res://checker_floor.gdshader" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://dx1548l4kqcoc" path="res://metal_direction_block.tscn" id="4_1bvp3"]
+[ext_resource type="Shader" uid="uid://ctscm1q7ouccv" path="res://shaders/checker_floor.gdshader" id="3_lquwl"]
+[ext_resource type="PackedScene" uid="uid://dx1548l4kqcoc" path="res://node/metal_direction_block.tscn" id="4_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://dlkqqbnfl3bp5" path="res://assets/blank_1080_texture.png" id="5_7mycd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
