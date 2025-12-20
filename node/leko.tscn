@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3a1r73ar8kjm"]
+
+[ext_resource type="Script" uid="uid://1dk380yy5h5g" path="res://scripts/leko.gd" id="1_bewpj"]
+
+[node name="Leko" type="StaticBody3D"]
+collision_mask = 0
+script = ExtResource("1_bewpj")
+pushable = true
+weight = 4

@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="stencil test"
-run/main_scene="uid://btsu5hym1hp7v"
+config/name="leko tawa"
+run/main_scene="uid://ckcc3w7belxeq"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
